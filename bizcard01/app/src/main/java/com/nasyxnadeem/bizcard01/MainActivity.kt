@@ -148,12 +148,12 @@ fun Portfolio(data: List<String>) {
 private fun UserDetails() {
     Column(modifier = Modifier.padding(5.dp)) {
         Text(
-            text = "Miles P.",
+            text = "Nasyx Nadeem",
             style = MaterialTheme.typography.h4,
             color = MaterialTheme.colors.primaryVariant
         )
         Text(
-            text = "Android Compose Programmer",
+            text = "Full Stack Developer",
             modifier = Modifier.padding(3.dp)
         )
         Text(
