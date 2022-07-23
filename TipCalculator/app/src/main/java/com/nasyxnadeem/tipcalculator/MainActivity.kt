@@ -1,57 +1,122 @@
 package com.nasyxnadeem.tipcalculator
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nasyxnadeem.tipcalculator.components.InputField
 import com.nasyxnadeem.tipcalculator.ui.theme.TipCalculatorTheme
+import com.nasyxnadeem.tipcalculator.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                Text("Hello World")
+                Column{
+                    TopHeader()
+                    MainContent()
+                }
             }
         }
     }
 }
 
-@Preview
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun MainContent() {
+fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {}) {
     val totalBillState = remember {
         mutableStateOf("")
     }
+
+    val isValid = remember(totalBillState.value) {
+        totalBillState.value.trim().isNotEmpty()
+    }
+
+    val keyboardController = LocalSoftwareKeyboardController.current
     Surface(
         modifier = Modifier.padding(2.dp),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
         border = BorderStroke(width = 1.dp, color = Color.LightGray)
     ) {
+
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            horizontalAlignment = Alignment.Start,
+            verticalArrangement = Arrangement.Top,
+            modifier = Modifier.padding(6.dp)
         ) {
-            InputField(valueState = totalBillState, labelId = "Enter Bill", enabled = true, isSingleLine = true)
-        }
+            InputField(
+                modifier = modifier,
+                valueState = totalBillState,
+                labelId = "Enter Bill",
+                enabled = true,
+                isSingleLine = true,
+                onAction = KeyboardActions {
+                    if (!isValid) return@KeyboardActions
+                    onValChange(totalBillState.value.trim())
+                    keyboardController?.hide()
+                })
+
+            if (isValid) {
+                Row(modifier = Modifier.padding(3.dp), horizontalArrangement = Arrangement.Start) {
+                    Text(
+                        text = "Split",
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier.width(120.dp))
+
+                    Row(
+                        modifier = Modifier.padding(horizontal = 3.dp),
+                        horizontalArrangement = Arrangement.End
+                    ) {
+
+                    }
+
+                }
+            }
+
+        else {
+
+
+    }
+    }
+
+}
+
+}
+
+// 0580041200002234
+
+@Preview
+@Composable
+fun MainContent() {
+    BillForm(Modifier.fillMaxWidth()) {
+        billAmt ->
+        Log.d("bm", "MainContent: $billAmt")
     }
 }
 
@@ -92,7 +157,7 @@ fun MyApp(content: @Composable () -> Unit) {
 fun DefaultPreview() {
     TipCalculatorTheme {
         MyApp {
-            Text("Hello again")
+            TopHeader()
         }
     }
 }
