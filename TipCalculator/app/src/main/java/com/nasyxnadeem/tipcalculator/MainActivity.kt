@@ -12,9 +12,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,7 +26,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nasyxnadeem.tipcalculator.components.InputField
 import com.nasyxnadeem.tipcalculator.ui.theme.TipCalculatorTheme
-import com.nasyxnadeem.tipcalculator.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +54,7 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
     }
 
     val keyboardController = LocalSoftwareKeyboardController.current
+
     Surface(
         modifier = Modifier.padding(2.dp),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
@@ -109,7 +106,6 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
 
 }
 
-// 0580041200002234
 
 @Preview
 @Composable
