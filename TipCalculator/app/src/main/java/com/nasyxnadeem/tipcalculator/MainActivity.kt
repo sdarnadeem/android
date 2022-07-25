@@ -64,6 +64,14 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
         mutableStateOf(0f)
     }
 
+    val splitByState = remember {
+        mutableStateOf(1)
+    }
+
+    val tipAmountState = remember {
+        mutableStateOf(10f)
+    }
+
     Surface(
         modifier = Modifier.padding(2.dp),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
@@ -100,12 +108,12 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RoundIconButton(imageVector = Icons.Default.Remove, onClick = { /*TODO*/ })
+                        RoundIconButton(imageVector = Icons.Default.Remove, onClick = { if(splitByState.value > 1) splitByState.value--  })
                     }
                     Text(modifier = Modifier
                         .padding(horizontal = 10.dp)
-                        .align(alignment = Alignment.CenterVertically), text = "2")
-                    RoundIconButton(imageVector = Icons.Default.Add, onClick = { /*TODO*/ })
+                        .align(alignment = Alignment.CenterVertically), text = splitByState.value.toString())
+                    RoundIconButton(imageVector = Icons.Default.Add, onClick = { splitByState.value++ })
 
 
 
@@ -125,12 +133,17 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
                 }
 5
                 // Slider + text column
+
+                val tipPercentage = (sliderPositionState.value * 100).toInt()
                 Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = (sliderPositionState.value * 100).toInt().toString())
+                    Text(text = "$ ${tipPercentage.toString()}")
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    Slider(steps = 10, value = sliderPositionState.value, onValueChange = {newVal ->  sliderPositionState.value = newVal}, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+                    Slider(steps = 10, value = sliderPositionState.value, onValueChange = {newVal ->  sliderPositionState.value = newVal
+                                                                                          calculateTotalTip(totalBill= totalBillState.value.toDouble(), tipPercentage = tipPercentage)
+
+                                                                                          }, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
                 }
             }
 
@@ -142,6 +155,12 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
 
 }
 
+}
+
+fun calculateTotalTip(totalBill: Double, tipPercentage: Int): Double {
+    return if(totalBill > 1 && totalBill.toString().isNotEmpty())
+        (totalBill * 100) / 100
+    else 0.0
 }
 
 
@@ -161,6 +180,7 @@ fun TopHeader(totalPerPerson: Double = 134.0) {
         modifier = Modifier
             .fillMaxWidth()
             .height(150.dp)
+            .padding(10.dp)
             .clip(shape = RoundedCornerShape(corner = CornerSize(12.dp))), color = Color(0xFFE9D7F7)
     ) {
         Column(
