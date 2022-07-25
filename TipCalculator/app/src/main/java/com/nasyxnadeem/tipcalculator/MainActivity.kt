@@ -39,7 +39,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                Column{
+                Column {
                     MainContent()
                 }
             }
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {}) {
+fun BillForm(modifier: Modifier = Modifier, onValChange: (String) -> Unit = {}) {
     val totalBillState = remember {
         mutableStateOf("")
     }
@@ -115,13 +115,29 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        RoundIconButton(imageVector = Icons.Default.Remove, onClick = { if(splitByState.value > 1) splitByState.value--  })
-                    }
-                    Text(modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .align(alignment = Alignment.CenterVertically), text = splitByState.value.toString())
-                    RoundIconButton(imageVector = Icons.Default.Add, onClick = { splitByState.value++ })
+                        RoundIconButton(
+                            imageVector = Icons.Default.Remove,
+                            onClick = { if (splitByState.value > 1) splitByState.value--
 
+                                val tipPercentage = (sliderPositionState.value * 100).toInt()
+
+                                totalPerPerson.value = calculateTotalPerPerson(totalBillState.value.toDouble(), splitByState.value, tipPercentage)
+                            })
+                    }
+                    Text(
+                        modifier = Modifier
+                            .padding(horizontal = 10.dp)
+                            .align(alignment = Alignment.CenterVertically),
+                        text = splitByState.value.toString()
+                    )
+                    RoundIconButton(
+                        imageVector = Icons.Default.Add,
+                        onClick = { splitByState.value++
+                            val tipPercentage = (sliderPositionState.value * 100).toInt()
+
+                            totalPerPerson.value = calculateTotalPerPerson(totalBillState.value.toDouble(), splitByState.value, tipPercentage)
+
+                        })
 
 
                 }
@@ -133,47 +149,60 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
                         text = "Tip",
                         modifier = Modifier.align(alignment = Alignment.CenterVertically)
                     )
-                    Spacer(modifier = Modifier
-                        .width(200.dp)
-                        .align(alignment = Alignment.CenterVertically))
+                    Spacer(
+                        modifier = Modifier
+                            .width(200.dp)
+                            .align(alignment = Alignment.CenterVertically)
+                    )
                     Text(text = "$33.00")
                 }
-5
+                5
                 // Slider + text column
 
                 val tipPercentage = (sliderPositionState.value * 100).toInt()
-                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(text = "$ $tipPercentage")
 
                     Spacer(modifier = Modifier.height(14.dp))
 
-                    Slider(steps = 10, value = sliderPositionState.value, onValueChange = {newVal ->  sliderPositionState.value = newVal
-                                                                                          calculateTotalTip(totalBill= totalBillState.value.toDouble(), tipPercentage = tipPercentage)
+                    Slider(
+                        steps = 10,
+                        value = sliderPositionState.value,
+                        onValueChange = { newVal ->
+                            sliderPositionState.value = newVal
+                            calculateTotalTip(
+                                totalBill = totalBillState.value.toDouble(),
+                                tipPercentage = tipPercentage
+                            )
 
-                        totalPerPerson.value = calculateTotalPerPerson(totalBillState.value.toDouble(), splitByState.value, tipPercentage)
+                            totalPerPerson.value = calculateTotalPerPerson(
+                                totalBillState.value.toDouble(),
+                                splitByState.value,
+                                tipPercentage
+                            )
 
-                                                                                          }, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
+                        },
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                    )
                 }
+            } else {
+
+
             }
+        }
 
-        else {
-
-
-    }
     }
 
 }
-
-}
-
-
 
 
 @Preview
 @Composable
 fun MainContent() {
-    BillForm(Modifier.fillMaxWidth()) {
-        billAmt ->
+    BillForm(Modifier.fillMaxWidth()) { billAmt ->
         Log.d("bm", "MainContent: $billAmt")
     }
 }
@@ -195,7 +224,11 @@ fun TopHeader(totalPerPerson: Double = 134.0) {
         ) {
             val total = "%.2f".format(totalPerPerson)
             Text(text = "Total Per Person", style = MaterialTheme.typography.h5)
-            Text(text = "$$total", style = MaterialTheme.typography.h4, fontWeight = FontWeight.ExtraBold)
+            Text(
+                text = "$$total",
+                style = MaterialTheme.typography.h4,
+                fontWeight = FontWeight.ExtraBold
+            )
         }
     }
 }
