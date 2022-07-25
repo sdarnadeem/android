@@ -1,6 +1,5 @@
 package com.nasyxnadeem.movieapp.screens.home
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -55,7 +54,7 @@ fun MainContent(
         LazyColumn {
             items(movieList) { movie ->
                 MovieItem(movie) {
-                    navController.navigate(route = MovieScreens.DetailsScreen.name)
+                    navController.navigate(route = MovieScreens.DetailsScreen.name+"/$movie")
                 }
             }
         }
