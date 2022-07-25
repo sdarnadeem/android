@@ -30,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nasyxnadeem.tipcalculator.components.InputField
 import com.nasyxnadeem.tipcalculator.ui.theme.TipCalculatorTheme
+import com.nasyxnadeem.tipcalculator.utils.calculateTotalPerPerson
+import com.nasyxnadeem.tipcalculator.utils.calculateTotalTip
 import com.nasyxnadeem.tipcalculator.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
@@ -38,7 +40,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             MyApp {
                 Column{
-                    TopHeader()
                     MainContent()
                 }
             }
@@ -71,6 +72,12 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
     val tipAmountState = remember {
         mutableStateOf(10f)
     }
+
+    val totalPerPerson = remember {
+        mutableStateOf(1.0)
+    }
+
+    TopHeader(totalPerPerson = totalPerPerson.value)
 
     Surface(
         modifier = Modifier.padding(2.dp),
@@ -136,12 +143,14 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
 
                 val tipPercentage = (sliderPositionState.value * 100).toInt()
                 Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "$ ${tipPercentage.toString()}")
+                    Text(text = "$ $tipPercentage")
 
                     Spacer(modifier = Modifier.height(14.dp))
 
                     Slider(steps = 10, value = sliderPositionState.value, onValueChange = {newVal ->  sliderPositionState.value = newVal
                                                                                           calculateTotalTip(totalBill= totalBillState.value.toDouble(), tipPercentage = tipPercentage)
+
+                        totalPerPerson.value = calculateTotalPerPerson(totalBillState.value.toDouble(), splitByState.value, tipPercentage)
 
                                                                                           }, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
                 }
@@ -157,11 +166,7 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
 
 }
 
-fun calculateTotalTip(totalBill: Double, tipPercentage: Int): Double {
-    return if(totalBill > 1 && totalBill.toString().isNotEmpty())
-        (totalBill * 100) / 100
-    else 0.0
-}
+
 
 
 @Preview
