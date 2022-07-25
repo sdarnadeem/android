@@ -10,8 +10,12 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Slider
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Remove
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.nasyxnadeem.tipcalculator.components.InputField
 import com.nasyxnadeem.tipcalculator.ui.theme.TipCalculatorTheme
+import com.nasyxnadeem.tipcalculator.widgets.RoundIconButton
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +60,10 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
+    val sliderPositionState = remember {
+        mutableStateOf(0f)
+    }
+
     Surface(
         modifier = Modifier.padding(2.dp),
         shape = RoundedCornerShape(corner = CornerSize(8.dp)),
@@ -79,7 +88,7 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
                 })
 
             if (isValid) {
-                Row(modifier = Modifier.padding(3.dp), horizontalArrangement = Arrangement.Start) {
+                Row(modifier = Modifier.padding(10.dp), horizontalArrangement = Arrangement.Start) {
                     Text(
                         text = "Split",
                         modifier = Modifier.align(alignment = Alignment.CenterVertically)
@@ -88,11 +97,40 @@ fun BillForm(modifier: Modifier = Modifier, onValChange : (String) -> Unit = {})
 
                     Row(
                         modifier = Modifier.padding(horizontal = 3.dp),
-                        horizontalArrangement = Arrangement.End
+                        horizontalArrangement = Arrangement.End,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-
+                        RoundIconButton(imageVector = Icons.Default.Remove, onClick = { /*TODO*/ })
                     }
+                    Text(modifier = Modifier
+                        .padding(horizontal = 10.dp)
+                        .align(alignment = Alignment.CenterVertically), text = "2")
+                    RoundIconButton(imageVector = Icons.Default.Add, onClick = { /*TODO*/ })
 
+
+
+                }
+
+                // Tip Row
+
+                Row(modifier = Modifier.padding(10.dp)) {
+                    Text(
+                        text = "Tip",
+                        modifier = Modifier.align(alignment = Alignment.CenterVertically)
+                    )
+                    Spacer(modifier = Modifier
+                        .width(200.dp)
+                        .align(alignment = Alignment.CenterVertically))
+                    Text(text = "$33.00")
+                }
+5
+                // Slider + text column
+                Column(verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(text = (sliderPositionState.value * 100).toInt().toString())
+
+                    Spacer(modifier = Modifier.height(14.dp))
+
+                    Slider(steps = 10, value = sliderPositionState.value, onValueChange = {newVal ->  sliderPositionState.value = newVal}, modifier = Modifier.padding(start = 16.dp, end = 16.dp))
                 }
             }
 
