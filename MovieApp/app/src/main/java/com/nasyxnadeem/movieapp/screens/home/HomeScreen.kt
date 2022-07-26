@@ -17,7 +17,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.nasyxnadeem.movieapp.model.Movie
+import com.nasyxnadeem.movieapp.model.getMovies
 import com.nasyxnadeem.movieapp.navigation.MovieScreens
+import com.nasyxnadeem.movieapp.widgets.MovieItem
 
 @Composable
 fun HomeScreen(navController: NavController) {
@@ -38,56 +41,16 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun MainContent(
     navController: NavController,
-    movieList: List<String> = listOf(
-        "Avatar",
-        "Life",
-        "Harry Potter",
-        "300",
-        "Hacksaw Ridge",
-        "13 Reasons Why",
-        "Peaky Blinder",
-        "Prison Break",
-        "Titanic"
-    )
+    movieList: List<Movie> = getMovies()
 ) {
     Surface(color = MaterialTheme.colors.background) {
         LazyColumn {
             items(movieList) { movie ->
                 MovieItem(movie) {
-                    navController.navigate(route = MovieScreens.DetailsScreen.name+"/$movie")
+//                    navController.navigate(route = MovieScreens.DetailsScreen.name+"/$movie.id")
                 }
             }
         }
     }
 }
 
-@Composable
-fun MovieItem(movie: String, onItemClick: (String) -> Unit = {}) {
-    Card(
-        modifier = Modifier
-            .padding(4.dp)
-            .fillMaxWidth()
-            .height(130.dp)
-            .clickable {
-                onItemClick(movie)
-            },
-        shape = RoundedCornerShape(corner = CornerSize(16.dp)),
-        elevation = 6.dp
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Surface(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .size(100.dp),
-
-                ) {
-                Icon(imageVector = Icons.Default.AccountBox, contentDescription = "Account")
-
-            }
-            Text(text = movie)
-        }
-    }
-}

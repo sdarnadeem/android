@@ -1,6 +1,6 @@
 package com.nasyxnadeem.movieapp.navigation
 
-import DetailsScreen
+import com.nasyxnadeem.movieapp.screens.details.DetailsScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -18,9 +18,9 @@ fun MovieNavigation() {
         }
 
         // www.google.com/detail-screen/id=34
-        composable(MovieScreens.DetailsScreen.name+"/{movie}",
-        arguments = listOf(navArgument(name = "movie") {type = androidx.navigation.NavType.StringType})) {
-            DetailsScreen(navController = navController, it.arguments?.getString("movie"))
-        }
+//        composable(MovieScreens.DetailsScreen.name+"/{movie}",
+//        arguments = listOf(navArgument(name = "movie") {type = androidx.navigation.NavType.StringType})) {
+//            DetailsScreen(navController = navController, it.arguments?.getString("movie"))
+//        }
     }
 }
