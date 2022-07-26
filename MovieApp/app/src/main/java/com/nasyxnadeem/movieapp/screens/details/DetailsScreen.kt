@@ -1,6 +1,10 @@
 package com.nasyxnadeem.movieapp.screens.details
+
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -10,18 +14,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import coil.compose.rememberImagePainter
 import com.nasyxnadeem.movieapp.model.Movie
+import com.nasyxnadeem.movieapp.model.getMovies
+import com.nasyxnadeem.movieapp.widgets.MovieItem
 
 @Composable
-fun DetailsScreen(navController: NavController, movieData: Movie) {
-    MovieInformation(movieData, navController)
+fun DetailsScreen(navController: NavController, movieId: String?) {
+    MovieInformation(movieId, navController)
 }
 
 @Composable
 private fun MovieInformation(
-    movieData: Movie,
+    movieId: String?,
     navController: NavController
 ) {
+    val movie = getMovies().filter {
+        it.id == movieId
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -29,23 +39,26 @@ private fun MovieInformation(
                 elevation = 5.dp
             ) {
                 Row(horizontalArrangement = Arrangement.Start) {
-                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back", modifier = Modifier.clickable{
-                        navController.popBackStack()
-                    })
+                    Icon(
+                        imageVector = Icons.Default.ArrowBack,
+                        contentDescription = "back",
+                        modifier = Modifier.clickable {
+                            navController.popBackStack()
+                        })
                     Spacer(modifier = Modifier.width(100.dp))
                     Text(text = "Movie")
                 }
             }
         }
     ) {
-        DetailsContent(movieData)
+        DetailsContent(movie[0])
     }
 
 }
 
 @Composable
 private fun DetailsContent(
-    movieData: Movie,
+    movie: Movie,
 ) {
     Surface(
         modifier = Modifier
@@ -53,13 +66,36 @@ private fun DetailsContent(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Top
         ) {
-            Text(text = movieData.title, style = MaterialTheme.typography.h5)
-            Spacer(modifier = Modifier.height(23.dp))
+            MovieItem(movie = movie)
+            Spacer(modifier = Modifier.height(8.dp))
+            Divider()
 
+            Text(text = "Movie Images")
+
+            ImageRow(movie)
         }
 
 
+    }
+}
+
+@Composable
+private fun ImageRow(movie: Movie) {
+    LazyRow {
+        items(items = movie.images) { image ->
+            Card(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .size(240.dp),
+                elevation = 5.dp
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = image),
+                    contentDescription = "movie poster"
+                )
+            }
+        }
     }
 }

@@ -18,9 +18,9 @@ fun MovieNavigation() {
         }
 
         // www.google.com/detail-screen/id=34
-//        composable(MovieScreens.DetailsScreen.name+"/{movie}",
-//        arguments = listOf(navArgument(name = "movie") {type = androidx.navigation.NavType.StringType})) {
-//            DetailsScreen(navController = navController, it.arguments?.getString("movie"))
-//        }
+        composable(MovieScreens.DetailsScreen.name+"/{movie}",
+        arguments = listOf(navArgument(name = "movie") {type = androidx.navigation.NavType.StringType})) {
+            DetailsScreen(navController = navController, it.arguments?.getString("movie"))
+        }
     }
 }

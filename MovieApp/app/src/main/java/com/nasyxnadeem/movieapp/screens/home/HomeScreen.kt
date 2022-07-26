@@ -24,6 +24,8 @@ import com.nasyxnadeem.movieapp.widgets.MovieItem
 
 @Composable
 fun HomeScreen(navController: NavController) {
+
+
     Scaffold(topBar = {
         TopAppBar(backgroundColor = Color.Gray, elevation = 5.dp) {
             Text(
@@ -47,7 +49,7 @@ fun MainContent(
         LazyColumn {
             items(movieList) { movie ->
                 MovieItem(movie) {
-//                    navController.navigate(route = MovieScreens.DetailsScreen.name+"/$movie.id")
+                    navController.navigate(route = MovieScreens.DetailsScreen.name+"/${movie.id}")
                 }
             }
         }
