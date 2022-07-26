@@ -22,7 +22,7 @@ fun NoteInputText(
     onTextChange: (String) -> Unit,
     onImeAction: () -> Unit = {}
 ) {
-    val keyboardController  = LocalSoftwareKeyboardController.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     TextField(
         value = text,
