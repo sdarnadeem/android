@@ -8,9 +8,12 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.nasyxnadeem.noteapp.data.NoteData
+import com.nasyxnadeem.noteapp.model.Note
 import com.nasyxnadeem.noteapp.screen.NoteScreen
 import com.nasyxnadeem.noteapp.ui.theme.NoteAppTheme
 
@@ -24,8 +27,17 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
+                    val notes = remember {
+                        mutableStateListOf<Note>(
+
+                        )
+                    }
                     NoteScreen(
-                        notes = NoteData().loadNotes()
+                        notes = notes,
+                        onRemoveNote = {},
+                        onAddNote = {
+                            notes.add(it)
+                        }
                     )
                 }
             }
