@@ -32,6 +32,7 @@ fun NoteItem(
     ) {
         Column(modifier = Modifier
             .clickable {
+                onNoteClicked(note)
             }
             .padding(horizontal = 20.dp, vertical = 10.dp), horizontalAlignment = Alignment.Start) {
             Text(text = note.title, style = MaterialTheme.typography.subtitle2)
