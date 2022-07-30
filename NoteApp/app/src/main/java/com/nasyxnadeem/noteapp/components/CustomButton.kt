@@ -14,7 +14,7 @@ fun CustomButton(
 
 
 ) {
-    Button(modifier = modifier, onClick = onClick) {
+    Button(modifier = modifier, onClick = onClick, enabled = enabled) {
         Text(text = text)
     }
 }

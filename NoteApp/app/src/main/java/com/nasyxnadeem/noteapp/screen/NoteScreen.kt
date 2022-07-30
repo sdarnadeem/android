@@ -1,6 +1,8 @@
 package com.nasyxnadeem.noteapp.screen
 
+import android.content.Context
 import android.widget.ExpandableListView
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -19,6 +21,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -45,6 +48,7 @@ fun NoteScreen(
     var content by remember {
         mutableStateOf("")
     }
+    val context = LocalContext.current
     Column {
         TopBar(onClick = {showForm = true})
 
@@ -77,10 +81,12 @@ fun NoteScreen(
 
             CustomButton(modifier = Modifier.padding(top = 10.dp), text = "save", onClick = {
                 if (title.isNotEmpty() && content.isNotEmpty()) {
-
+                    onAddNote(Note(title = title, content = content))
                     title = ""
                     content = ""
                     showForm = false
+
+                    Toast.makeText(context, "Note added Successfully", Toast.LENGTH_SHORT).show()
                 }
             })
 
@@ -91,7 +97,11 @@ fun NoteScreen(
             items(items = notes) {
                 note ->
 
-NoteItem(note = note, onNoteClicked = {})            }
+NoteItem(note = note, onNoteClicked = {
+
+        onRemoveNote(note)
+
+})            }
         }
     }
 }
