@@ -7,6 +7,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.ButtonDefaults.buttonColors
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -42,23 +43,23 @@ fun Questions(viewModel: QuestionsViewModel) {
         mutableStateOf(0)
     }
 
-    if (viewModel.data.value.loading == true) {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-
-        ) {
-            CircularProgressIndicator(modifier = Modifier.size(70.dp))
-        }
-    } else {
+//    if (viewModel.data.value.loading == true) {
+//        Column(
+//            modifier = Modifier.fillMaxSize(),
+//            verticalArrangement = Arrangement.Center,
+//            horizontalAlignment = Alignment.CenterHorizontally
+//
+//        ) {
+//            CircularProgressIndicator(modifier = Modifier.size(70.dp))
+//        }
+//    } else {
         val question = try {
             questions?.get(questionIndexState.value)
         } catch (ex: Exception) {
             null
         }
 
-        if (question != null) {
+
             SingleQuestion(
                 question = questions?.get(questionIndexState.value),
                 questionIndex = questionIndexState,
@@ -66,9 +67,8 @@ fun Questions(viewModel: QuestionsViewModel) {
                 onNextClicked = {
                     questionIndexState.value++
                 })
-        }
     }
-}
+//}
 
 //@Preview
 @Composable
@@ -92,6 +92,7 @@ fun SingleQuestion(
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.Start
         ) {
+            if (questionIndex.value >= 3) ShowProgress(score = questionIndex.value)
             QuestionTracker(counter = questionIndex.value + 1, outOf = outOf)
             DottedLine(pathEffect)
             QuestionDetails(
@@ -205,7 +206,6 @@ fun QuestionDetails(
                 RadioButton(
 
                     selected = (answerState.value == index), onClick = {
-                        onNextClicked()
                         updateAnswer(index)
                     }, modifier = Modifier.padding(start = 16.dp),
                     colors = RadioButtonDefaults.colors(
@@ -253,5 +253,48 @@ fun QuestionDetails(
                 fontSize = 17.sp
             )
         }
+    }
+}
+
+@Composable
+fun ShowProgress(score: Int = 12) {
+
+    val gradient = Brush.linearGradient(listOf(Color(0xff95075), Color(0xffbe6be5)))
+
+    val progressFactor = remember(score) {
+        mutableStateOf(score * 0.005f)
+    }
+
+    Row(
+        modifier = Modifier.padding(3.dp)
+            .fillMaxWidth()
+            .height(45.dp)
+            .border(
+                width = 4.dp, brush = Brush.linearGradient(
+                    colors = listOf(
+                        AppColors.mLightPurple, AppColors.mLightPurple
+                    )
+                ), shape = RoundedCornerShape(34.dp)
+            ).clip(
+                RoundedCornerShape(
+                    topStartPercent = 50,
+                    topEndPercent = 50,
+                    bottomEndPercent = 50,
+                    bottomStartPercent = 50
+                )
+            ).background(Color.Transparent), verticalAlignment = Alignment.CenterVertically
+    ) {
+
+        Button(
+            onClick = {},
+            contentPadding = PaddingValues(1.dp),
+            modifier = Modifier.fillMaxSize(progressFactor.value).background(brush = gradient),
+            enabled = false,
+            elevation = null,
+            colors = buttonColors(
+                backgroundColor = Color.Transparent,
+                disabledBackgroundColor = Color.Transparent
+            )
+        ) {}
     }
 }
