@@ -1,3 +1,5 @@
+@file:Suppress("FunctionName")
+
 package com.nasyxnadeem.weatherforecast
 
 import android.os.Bundle
@@ -16,28 +18,30 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            WeatherForecastTheme {
-                // A surface container using the 'background' color from the theme
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    Greeting("Android")
-                }
-            }
+
+           MyApp {
+               Text(text="HelloWorld")
+           }
+
+        }
+    }
+}
+@Composable
+fun MyApp(content : @Composable () -> Unit ={}) {
+    WeatherForecastTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colors.background
+        ) {
+            content()
         }
     }
 }
 
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
-    WeatherForecastTheme {
-        Greeting("Android")
+fun MyAppPreview() {
+    MyApp {
+            Text(text="HelloWorld")
     }
 }
