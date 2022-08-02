@@ -1,4 +1,4 @@
-package com.nasyxnadeem.weatherforecast.screens
+package com.nasyxnadeem.weatherforecast.screens.splash
 
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
@@ -34,6 +34,7 @@ fun SplashScreen(navController: NavController) {
         Animatable(0f)
     }
 
+    // same as useEffect() in Reactjs
     LaunchedEffect(key1 = true, block = {
         scale.animateTo(
             targetValue = 0.9f,
