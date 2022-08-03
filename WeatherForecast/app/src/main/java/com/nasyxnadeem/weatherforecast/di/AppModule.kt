@@ -5,6 +5,7 @@ import com.nasyxnadeem.weatherforecast.utils.Constants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -12,7 +13,7 @@ import javax.inject.Singleton
 
 // create the providers, that provide the app with resources required
 @Module
-@InstallIn(Singleton::class)
+@InstallIn(SingletonComponent::class)
 class AppModule {
 
     // Provide function for our retrofit backed api

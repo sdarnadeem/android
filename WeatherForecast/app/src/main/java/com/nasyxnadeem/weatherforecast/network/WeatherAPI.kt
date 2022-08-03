@@ -1,6 +1,7 @@
 package com.nasyxnadeem.weatherforecast.network
 
-import com.nasyxnadeem.weatherforecast.model.WeatherObject
+import com.nasyxnadeem.weatherforecast.model.Weather
+
 import com.nasyxnadeem.weatherforecast.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -12,7 +13,7 @@ interface WeatherAPI {
     // making an api call
     @GET(value = "data/2.5/forecast/")
     suspend fun getWeather(
-        @Query("q") query: String,
+        @Query("q") city: String,
         @Query("units") units: String = "imperial",
         @Query("appid") appid: String = Constants.API_KEY
-    ): WeatherObject }
+    ): Weather }
