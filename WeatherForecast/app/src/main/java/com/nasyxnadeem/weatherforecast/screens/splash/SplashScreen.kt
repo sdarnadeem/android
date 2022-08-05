@@ -33,6 +33,7 @@ fun SplashScreen(navController: NavController) {
     val scale = remember {
         Animatable(0f)
     }
+    val defaultCity = "srinagar"
 
     // same as useEffect() in Reactjs
     LaunchedEffect(key1 = true, block = {
@@ -47,7 +48,7 @@ fun SplashScreen(navController: NavController) {
             )
         )
         delay(2000L)
-        navController.navigate(WeatherScreens.MainScreen.name)
+        navController.navigate(WeatherScreens.MainScreen.name + "/$defaultCity")
     })
     Surface(
         modifier = Modifier.padding(15.dp)
