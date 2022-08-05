@@ -5,10 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -16,6 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
@@ -23,8 +22,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.nasyxnadeem.weatherforecast.model.Favorite
 import com.nasyxnadeem.weatherforecast.navigation.WeatherScreens
+import com.nasyxnadeem.weatherforecast.screens.favourite.FavoriteViewModel
 
 @Composable
 fun WeatherTopBar(
@@ -33,6 +35,7 @@ fun WeatherTopBar(
     isMainScreen: Boolean = true,
     elevation: Dp = 0.dp,
     navController: NavController,
+    favoriteViewModel: FavoriteViewModel = hiltViewModel(),
     onAddActionClicked: () -> Unit = {},
     onButtonClicked: () -> Unit = {}
 ) {
@@ -58,6 +61,7 @@ fun WeatherTopBar(
         actions = {
             if (isMainScreen) {
 
+
                 IconButton(onClick = { onAddActionClicked.invoke() }) {
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Search icon")
                 }
@@ -77,6 +81,21 @@ fun WeatherTopBar(
                         onButtonClicked.invoke()
                     })
 
+            }
+            if (isMainScreen) {
+                Icon(
+                    Icons.Default.Favorite,
+                    contentDescription = null,
+                    modifier = Modifier.scale(0.9f).clickable {
+                        favoriteViewModel.insertFavorite(
+                            Favorite(
+                                city = title.split(",")[0],
+                                country = title.split(",")[1]
+                            )
+                        )
+                    },
+                    tint = Color.Red
+                )
             }
         },
         backgroundColor = Color.Transparent,
