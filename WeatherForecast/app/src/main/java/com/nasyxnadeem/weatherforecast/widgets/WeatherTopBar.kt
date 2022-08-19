@@ -1,5 +1,7 @@
 package com.nasyxnadeem.weatherforecast.widgets
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -43,10 +46,16 @@ fun WeatherTopBar(
     val showDialog = remember {
         mutableStateOf(false)
     }
+    val showIt = remember {
+        mutableStateOf(false)
+    }
+
+    val context = LocalContext.current
 
     if (showDialog.value) {
         ShowSettingDropDownMenu(showDialog = showDialog, navController = navController)
     }
+
 
     TopAppBar(
 
@@ -82,25 +91,49 @@ fun WeatherTopBar(
                     })
 
             }
+            val isAlreadyFavList = favoriteViewModel.favList.collectAsState().value.filter {
+                    item -> (item.city == title.split(",")[0])
+            }
             if (isMainScreen) {
+
+                val fav = Favorite(
+                    city = title.split(",")[0],
+                    country = title.split(",")[1]
+                )
                 Icon(
-                    Icons.Default.Favorite,
+                    imageVector = SetIcon(isAlreadyFavList),
                     contentDescription = null,
                     modifier = Modifier.scale(0.9f).clickable {
-                        favoriteViewModel.insertFavorite(
-                            Favorite(
-                                city = title.split(",")[0],
-                                country = title.split(",")[1]
-                            )
-                        )
+                        if (isAlreadyFavList.isEmpty()) {
+                            favoriteViewModel.insertFavorite(
+                                fav
+                            ).run {
+                                showIt.value = true
+                            }
+                        } else {
+                            favoriteViewModel.deleteFavorite(fav).run {
+                                showIt.value = true
+                            }
+                        }
                     },
                     tint = Color.Red
                 )
             }
+            ShowToast(context = context, showIt = showIt, isAlreadyFav = isAlreadyFavList )
         },
         backgroundColor = Color.Transparent,
         elevation = elevation
     )
+}
+@Composable
+fun ShowToast(context: Context, showIt: MutableState<Boolean>, isAlreadyFav: List<Favorite>) {
+    if (showIt.value && isAlreadyFav.isEmpty()) {
+        Toast.makeText(context, "City Added to Favorites", Toast.LENGTH_SHORT).show()
+    }
+
+    if (showIt.value && isAlreadyFav.isNotEmpty()) {
+        Toast.makeText(context, "City removed from Favorites", Toast.LENGTH_SHORT).show()
+    }
 }
 
 @Composable
@@ -130,7 +163,7 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: Na
                     Icon(
                         imageVector = when (text) {
                             "About" -> Icons.Default.Info
-                            "Favorites" -> Icons.Default.FavoriteBorder
+                            "Favorites" -> Icons.Default.Favorite
                             else -> Icons.Default.Settings
                         }, contentDescription = null, tint = Color.LightGray
                     )
@@ -138,7 +171,7 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: Na
                         navController.navigate(
                             when (text) {
                                 "About" -> WeatherScreens.AboutScreen.name
-                                "Favourites" -> WeatherScreens.FavouriteScreen.name
+                                "Favorites" -> WeatherScreens.FavouriteScreen.name
                                 else -> WeatherScreens.SettingScreen.name
                             }
                         )
@@ -146,5 +179,14 @@ fun ShowSettingDropDownMenu(showDialog: MutableState<Boolean>, navController: Na
                 }
             }
         }
+    }
+}
+
+@Composable
+fun SetIcon(isAlreadyFav: List<Favorite>) : ImageVector {
+    return if (isAlreadyFav.isNotEmpty()) {
+        Icons.Default.Favorite
+    } else {
+        Icons.Default.FavoriteBorder
     }
 }

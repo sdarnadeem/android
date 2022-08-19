@@ -3,6 +3,7 @@ package com.nasyxnadeem.weatherforecast.repository
 import com.nasyxnadeem.weatherforecast.data.WeatherDao
 import com.nasyxnadeem.weatherforecast.model.City
 import com.nasyxnadeem.weatherforecast.model.Favorite
+import com.nasyxnadeem.weatherforecast.model.Unit
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -21,5 +22,16 @@ class WeatherDbRepository @Inject constructor(private val dao: WeatherDao) {
     suspend fun deleteFavorite(favorite: Favorite) = dao.deleteFavorite(favorite = favorite)
 
     suspend fun getFavoriteById(city: String): Favorite = dao.getFavById(city)
+
+    // Units
+
+    fun getUnits(): Flow<List<Unit>> = dao.getUnits()
+
+    suspend fun  insertUnit(unit: Unit) = dao.insertUnit(unit)
+
+    suspend fun updateUnit(unit: Unit) = dao.updateUnit(unit)
+
+    suspend fun deleteUnit(unit: Unit) = dao.deleteUnit(unit)
+
 
 }

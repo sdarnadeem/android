@@ -38,6 +38,9 @@ fun AboutScreen(navController: NavController) {
                 Text(text = stringResource(R.string.about_app), style = MaterialTheme.typography.subtitle1, fontWeight = FontWeight.Bold)
 
                 Text(text = stringResource(R.string.api_used), style = MaterialTheme.typography.subtitle1, fontWeight = FontWeight.Light)
+
+
+                Text(text = "Developed by Nasyx Nadeem", style = MaterialTheme.typography.subtitle1, fontWeight = FontWeight.Light)
             }
         }
     }
