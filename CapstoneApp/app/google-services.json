@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "184623632541",
+    "project_id": "jetcapstoneapp",
+    "storage_bucket": "jetcapstoneapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:184623632541:android:46c7b316f1aa8da6668474",
+        "android_client_info": {
+          "package_name": "com.nasyxnadeem.capstoneapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "184623632541-00hhqjhv7vard2lqnm3rsj22hh17oejq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXo82ecUwfXWrasT1gWMq-k9C4iTCnB6g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "184623632541-00hhqjhv7vard2lqnm3rsj22hh17oejq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
