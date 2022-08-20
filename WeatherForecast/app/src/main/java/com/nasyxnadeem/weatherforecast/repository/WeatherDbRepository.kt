@@ -33,5 +33,7 @@ class WeatherDbRepository @Inject constructor(private val dao: WeatherDao) {
 
     suspend fun deleteUnit(unit: Unit) = dao.deleteUnit(unit)
 
+    suspend fun deleteAllUnits() = dao.deleteAllUnits()
+
 
 }
