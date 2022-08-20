@@ -4,32 +4,46 @@ package com.nasyxnadeem.weatherforecast.screens.main
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.produceState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.nasyxnadeem.weatherforecast.components.WeatherStateImage
 import com.nasyxnadeem.weatherforecast.data.DataOrException
 import com.nasyxnadeem.weatherforecast.model.Weather
 import com.nasyxnadeem.weatherforecast.navigation.WeatherScreens
+import com.nasyxnadeem.weatherforecast.screens.setting.SettingViewModel
 import com.nasyxnadeem.weatherforecast.utils.formatDate
 import com.nasyxnadeem.weatherforecast.utils.formatDecimals
 import com.nasyxnadeem.weatherforecast.widgets.WeatherTopBar
 
 @Composable
-fun MainScreen(navController: NavController, viewModel: MainViewModel, city : String?) {
+fun MainScreen(navController: NavController, viewModel: MainViewModel, city : String?, settingViewModel: SettingViewModel = hiltViewModel()) {
 
+    val unitFromDb = settingViewModel.unitList.collectAsState().value
 
+    var unit by remember {
+        mutableStateOf("imperial")
+    }
+
+    var isImperial by remember {
+        mutableStateOf(false)
+    }
+
+    if (!unitFromDb.isNullOrEmpty()) {
+        unit = unitFromDb[0].unit.split(" ")[0].lowercase()
+        isImperial = unit == "imperial"
+    }
 
     val weatherData = produceState<DataOrException<Weather, Boolean, Exception>>(
         initialValue = DataOrException(loading = true)
     ) {
-        value = viewModel.getWeatherData(city = city.toString(), units = "metric")
+        value = viewModel.getWeatherData(city = city.toString(), units = unit)
     }.value
 
     if (weatherData.loading == true) {
