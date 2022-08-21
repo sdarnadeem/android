@@ -1,5 +1,6 @@
 package com.nasyxnadeem.capstoneapp.screens
 
+import ReaderLogo
 import android.view.animation.OvershootInterpolator
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -16,8 +17,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
@@ -55,11 +54,7 @@ fun SplashScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
 
-            Text(
-                text = "A. Reader",
-                style = MaterialTheme.typography.h3,
-                color = Color.Red.copy(alpha = 0.5f)
-            )
+            ReaderLogo()
 
             Spacer(modifier = Modifier.height(15.dp))
 
@@ -72,3 +67,4 @@ fun SplashScreen(navController: NavController) {
 
     }
 }
+

@@ -4,8 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.nasyxnadeem.capstoneapp.screens.home.Home
 import com.nasyxnadeem.capstoneapp.screens.SplashScreen
+import com.nasyxnadeem.capstoneapp.screens.login.LoginScreen
 
 @Composable
 fun ReaderNavigation() {
@@ -17,8 +17,8 @@ fun ReaderNavigation() {
             SplashScreen(navController = navController)
         }
 
-        composable(route = ReaderScreens.ReaderHomeScreen.name) {
-            Home(navController = navController)
+        composable(route = ReaderScreens.LoginScreen.name) {
+            LoginScreen(navController = navController)
         }
     }
 }
