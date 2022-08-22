@@ -27,10 +27,12 @@ import androidx.compose.ui.text.font.FontWeight
 
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 
 @Composable
-fun LoginScreen(navController: NavHostController) {
+fun LoginScreen(navController: NavHostController, viewModel: LoginScreenViewModel = viewModel()) {
     val showLoginForm = rememberSaveable {
         mutableStateOf(true)
     }
@@ -44,14 +46,18 @@ fun LoginScreen(navController: NavHostController) {
             if (showLoginForm.value) {
                 UserForm(loading = false, isCreateAccount = false) { email, password ->
 
-                    // todo: Todo firebase login
+                   viewModel.signInWithEmailAndPassword(email, password) {
+                       navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+                   }
                 }
             } else {
                 UserForm(
                     loading = false,
                     isCreateAccount = true
                 ) { email, password ->
-                    // Todo: Create firebase account
+                    viewModel.createUserWithEmailAndPassword(email, password) {
+                        navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+                    }
                 }
             }
 
