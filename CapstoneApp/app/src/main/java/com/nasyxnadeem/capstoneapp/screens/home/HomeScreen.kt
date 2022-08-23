@@ -5,7 +5,9 @@ import ListCard
 import ReaderAppBar
 import TitleSection
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -85,16 +87,39 @@ fun HomeContent(navController: NavController) {
                 Divider()
             }
         }
-        ListCard()
+        ReadingRightNowArea(books = listOf(), navController = navController)
+
+        TitleSection(label = "Reading  List")
+
+        BookListArea(books = emptyList<MBook>(), navController = navController)
+    }
+}
+
+@Composable
+fun BookListArea(books: List<MBook>, navController: NavController) {
+    HorizontalScrollableComponent(books) {
+        // TODO: DO SOMETHING
+    }
+}
+
+@Composable
+fun HorizontalScrollableComponent(books: List<MBook>, onCardPressed: (String) -> Unit = {}) {
+    val scrollState = rememberScrollState()
+
+    Row(modifier = Modifier.fillMaxWidth().heightIn(280.dp).horizontalScroll(scrollState)) {
+
+        for (book in books) {
+            ListCard(book) {
+                onCardPressed(it)
+            }
+        }
     }
 }
 
 
 @Composable
 fun ReadingRightNowArea(books: List<MBook>, navController: NavController) {
-    Surface(
-
-    ) { }
+    ListCard()
 }
 
 
