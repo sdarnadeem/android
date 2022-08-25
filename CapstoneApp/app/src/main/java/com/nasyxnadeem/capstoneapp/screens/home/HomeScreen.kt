@@ -25,12 +25,12 @@ import com.nasyxnadeem.capstoneapp.model.MBook
 import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 
 @Composable
-fun Home(navController: NavHostController) {
+fun Home(navController: NavController) {
     Scaffold(
         topBar = { ReaderAppBar(title = "Nasyx Nadeem", navController = navController) },
         floatingActionButton = {
             FABContent {
-
+                navController.navigate(ReaderScreens.SearchScreen.name)
             }
         }
     ) {

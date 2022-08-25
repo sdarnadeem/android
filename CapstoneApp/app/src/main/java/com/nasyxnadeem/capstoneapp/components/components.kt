@@ -229,10 +229,11 @@ fun ReaderAppBar(
                         ).scale(0.9f)
                     )
                 }
-
                 if (icon != null) {
                     Icon(imageVector = icon, contentDescription = "arrowBack", tint = Color.Red.copy(alpha = 0.7f), modifier = Modifier.clickable { onBackArrowClicked.invoke() })
                 }
+                Spacer(modifier = Modifier.width(40.dp))
+
 
                 Text(
                     text = title,
@@ -251,7 +252,9 @@ fun ReaderAppBar(
                     }
                 }
             ) {
-                Icon(imageVector = Icons.Default.Logout, contentDescription = null)
+                if (showProfile) {
+                    Icon(imageVector = Icons.Default.Logout, contentDescription = null)
+                }
             }
         },
         backgroundColor = Color.Transparent,

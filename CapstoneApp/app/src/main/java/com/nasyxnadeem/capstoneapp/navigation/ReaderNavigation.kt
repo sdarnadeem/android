@@ -1,6 +1,5 @@
 package com.nasyxnadeem.capstoneapp.navigation
 
-import SearchScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,6 +7,7 @@ import androidx.navigation.compose.rememberNavController
 import com.nasyxnadeem.capstoneapp.screens.SplashScreen
 import com.nasyxnadeem.capstoneapp.screens.home.Home
 import com.nasyxnadeem.capstoneapp.screens.login.LoginScreen
+import com.nasyxnadeem.capstoneapp.screens.search.SearchScreen
 import com.nasyxnadeem.capstoneapp.screens.stats.StatsScreen
 
 @Composable
