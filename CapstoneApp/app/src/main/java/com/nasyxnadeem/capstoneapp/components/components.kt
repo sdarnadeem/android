@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -208,8 +209,10 @@ fun TitleSection(modifier: Modifier = Modifier, label : String) {
 @Composable
 fun ReaderAppBar(
     title: String,
+    icon: ImageVector? = null,
     showProfile: Boolean = true,
-    navController: NavController
+    navController: NavController,
+    onBackArrowClicked: () -> Unit = {}
 ) {
 
     TopAppBar(
@@ -225,6 +228,10 @@ fun ReaderAppBar(
                             RoundedCornerShape(12.dp)
                         ).scale(0.9f)
                     )
+                }
+
+                if (icon != null) {
+                    Icon(imageVector = icon, contentDescription = "arrowBack", tint = Color.Red.copy(alpha = 0.7f), modifier = Modifier.clickable { onBackArrowClicked.invoke() })
                 }
 
                 Text(

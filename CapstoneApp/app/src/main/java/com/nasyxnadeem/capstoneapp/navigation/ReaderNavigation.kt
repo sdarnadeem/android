@@ -1,5 +1,6 @@
 package com.nasyxnadeem.capstoneapp.navigation
 
+import SearchScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -28,6 +29,9 @@ fun ReaderNavigation() {
 
         composable(route = ReaderScreens.ReaderStatsScreen.name) {
             StatsScreen(navController = navController)
+        }
+        composable(route = ReaderScreens.SearchScreen.name) {
+            SearchScreen(navController = navController)
         }
     }
 }
