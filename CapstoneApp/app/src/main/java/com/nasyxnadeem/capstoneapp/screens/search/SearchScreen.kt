@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.nasyxnadeem.capstoneapp.model.MBook
+import com.nasyxnadeem.capstoneapp.model.book.VolumeInfo
 import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
@@ -71,7 +72,7 @@ fun BookList(navController: NavController, viewModel: SearchViewModel = hiltView
 
     LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp)) {
         items(items = listOfBooks) { book ->
-            BookRow(book, navController)
+            BookRow(book.volumeInfo, navController)
         }
     }
 }
@@ -112,7 +113,7 @@ fun SearchForm(
 
 @Composable
 
-fun BookRow(book: MBook, navController: NavController) {
+fun BookRow(book: VolumeInfo, navController: NavController) {
     Card(
         modifier = Modifier.clickable { }.fillMaxWidth().height(100.dp).padding(3.dp),
         shape = RectangleShape,
@@ -121,7 +122,11 @@ fun BookRow(book: MBook, navController: NavController) {
 
         Row(modifier = Modifier.padding(5.dp), verticalAlignment = Alignment.Top) {
 
-            val imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMvHFhNnMfyhZrz8vkkVA1XkaJojTp7OUw4QYA4enWgg&s"
+            val imageUrl : String = if (book.imageLinks.smallThumbnail.isEmpty()) {
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMvHFhNnMfyhZrz8vkkVA1XkaJojTp7OUw4QYA4enWgg&s"
+            } else {
+                book.imageLinks.smallThumbnail
+            }
 
             Image(painter = rememberAsyncImagePainter(imageUrl), contentDescription = null, modifier = Modifier.width(80.dp).fillMaxHeight().padding(end = 4.dp))
 
