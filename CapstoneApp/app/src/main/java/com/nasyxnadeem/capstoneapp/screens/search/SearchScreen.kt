@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
@@ -125,10 +126,14 @@ fun BookRow(book: MBook, navController: NavController) {
 
             val imageUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMvHFhNnMfyhZrz8vkkVA1XkaJojTp7OUw4QYA4enWgg&s"
 
-            Image(painter = rememberAsyncImagePainter(imageUrl), contentDescription = null)
+            Image(painter = rememberAsyncImagePainter(imageUrl), contentDescription = null, modifier = Modifier.width(80.dp).fillMaxHeight().padding(end = 4.dp))
 
             Column {
-                Text(text = book.title.toString(), overflow = TextOverflow.Ellipsis, )
+                Text(text = book.title.toString(), overflow = TextOverflow.Ellipsis )
+
+                Text(text = "Author: " + book.authors.toString(), overflow = TextOverflow.Clip, style = MaterialTheme.typography.caption )
+
+
             }
         }
     }
