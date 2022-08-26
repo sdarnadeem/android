@@ -71,7 +71,7 @@ fun BookList(navController: NavController, viewModel: SearchViewModel = hiltView
     } else {
         LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp)) {
             items(items = listOfBooks) { book ->
-                BookRow(book.volumeInfo, navController)
+                BookRow(book.volumeInfo, navController, book.id)
             }
         }
     }
@@ -115,10 +115,10 @@ fun SearchForm(
 
 @Composable
 
-fun BookRow(book: VolumeInfo, navController: NavController) {
+fun BookRow(book: VolumeInfo, navController: NavController, bookId: String) {
     Card(
         modifier = Modifier.clickable {
-            navController.navigate(ReaderScreens.DetailScreen.name)
+            navController.navigate(ReaderScreens.DetailScreen.name + "/$bookId")
         }.fillMaxWidth().height(100.dp).padding(3.dp),
         shape = RectangleShape,
         elevation = 7.dp

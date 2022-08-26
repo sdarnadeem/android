@@ -2,9 +2,11 @@ package com.nasyxnadeem.capstoneapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.nasyxnadeem.capstoneapp.screens.SplashScreen
 import com.nasyxnadeem.capstoneapp.screens.details.BookDetailsScreen
 import com.nasyxnadeem.capstoneapp.screens.home.Home
@@ -38,8 +40,14 @@ fun ReaderNavigation() {
             SearchScreen(navController = navController, viewModel = searchViewModel)
         }
 
-        composable(route = ReaderScreens.DetailScreen.name) {
-            BookDetailsScreen(navController = navController, bookId = "23")
+        val detailName = ReaderScreens.DetailScreen.name
+        composable("$detailName/{bookId}", arguments = listOf(navArgument("bookId") {
+            type = NavType.StringType
+        })) {
+            it.arguments?.getString("bookId").let {bookId ->
+                BookDetailsScreen(navController = navController, bookId = bookId.toString())
+            }
+
 
         }
     }
