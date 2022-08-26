@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.Card
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Scaffold
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
@@ -25,13 +22,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.text.font.FontStyle.Companion.Italic
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
-import com.nasyxnadeem.capstoneapp.model.MBook
 import com.nasyxnadeem.capstoneapp.model.book.VolumeInfo
 import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 
@@ -69,12 +66,17 @@ fun SearchScreen(navController: NavController = NavController(LocalContext.curre
 @Composable
 fun BookList(navController: NavController, viewModel: SearchViewModel = hiltViewModel()) {
     val listOfBooks = viewModel.list
-
-    LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp)) {
-        items(items = listOfBooks) { book ->
-            BookRow(book.volumeInfo, navController)
+    if (viewModel.isLoading) {
+        LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+    } else {
+        LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp)) {
+            items(items = listOfBooks) { book ->
+                BookRow(book.volumeInfo, navController)
+            }
         }
     }
+
+
 }
 
 @OptIn(ExperimentalComposeUiApi::class)
@@ -115,7 +117,9 @@ fun SearchForm(
 
 fun BookRow(book: VolumeInfo, navController: NavController) {
     Card(
-        modifier = Modifier.clickable { }.fillMaxWidth().height(100.dp).padding(3.dp),
+        modifier = Modifier.clickable {
+            navController.navigate(ReaderScreens.DetailScreen.name)
+        }.fillMaxWidth().height(100.dp).padding(3.dp),
         shape = RectangleShape,
         elevation = 7.dp
     ) {
@@ -133,7 +137,11 @@ fun BookRow(book: VolumeInfo, navController: NavController) {
             Column {
                 Text(text = book.title.toString(), overflow = TextOverflow.Ellipsis )
 
-                Text(text = "Author: " + book.authors.toString(), overflow = TextOverflow.Clip, style = MaterialTheme.typography.caption )
+                Text(text = "Author: " + book.authors.toString(), overflow = TextOverflow.Clip, style = MaterialTheme.typography.caption, fontStyle =  Italic)
+
+                Text(text = "Date: " + book.publishedDate.toString(), overflow = TextOverflow.Clip, style = MaterialTheme.typography.caption, fontStyle =  Italic)
+
+                Text(text = "Category: " + book.categories.toString(), overflow = TextOverflow.Clip, style = MaterialTheme.typography.caption, fontStyle =  Italic)
 
 
             }

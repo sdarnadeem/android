@@ -17,6 +17,7 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(private val repo: BookRepository) : ViewModel() {
 
     var list : List<Item> by mutableStateOf(listOf())
+    var isLoading: Boolean by mutableStateOf(true)
 
     init {
         searchBooks("android")
@@ -32,13 +33,18 @@ class SearchViewModel @Inject constructor(private val repo: BookRepository) : Vi
                 when(val response = repo.getBooks(s)) {
                     is Resource.Success -> {
                         list = response.data!!
+                        if (list.isNotEmpty()) {
+                            isLoading = false
+                        }
                     }
                     is Resource.Error -> {
+                        isLoading = false
                         println("Error Message")
                     }
                     else -> {}
                 }
             } catch (e: Exception) {
+                isLoading = false
                 println("Error" + e.message.toString())
             }
         }
