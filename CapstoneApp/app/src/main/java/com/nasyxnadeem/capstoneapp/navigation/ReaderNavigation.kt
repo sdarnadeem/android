@@ -1,6 +1,7 @@
 package com.nasyxnadeem.capstoneapp.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -8,6 +9,7 @@ import com.nasyxnadeem.capstoneapp.screens.SplashScreen
 import com.nasyxnadeem.capstoneapp.screens.home.Home
 import com.nasyxnadeem.capstoneapp.screens.login.LoginScreen
 import com.nasyxnadeem.capstoneapp.screens.search.SearchScreen
+import com.nasyxnadeem.capstoneapp.screens.search.SearchViewModel
 import com.nasyxnadeem.capstoneapp.screens.stats.StatsScreen
 
 @Composable
@@ -31,7 +33,8 @@ fun ReaderNavigation() {
             StatsScreen(navController = navController)
         }
         composable(route = ReaderScreens.SearchScreen.name) {
-            SearchScreen(navController = navController)
+            val searchViewModel = hiltViewModel<SearchViewModel>()
+            SearchScreen(navController = navController, viewModel = searchViewModel)
         }
     }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.nasyxnadeem.capstoneapp.model.MBook
@@ -36,7 +37,7 @@ import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 @Preview
-fun SearchScreen(navController: NavController = NavController(LocalContext.current)) {
+fun SearchScreen(navController: NavController = NavController(LocalContext.current), viewModel: SearchViewModel = hiltViewModel()) {
     Scaffold(
         topBar = {
             ReaderAppBar(
@@ -52,7 +53,10 @@ fun SearchScreen(navController: NavController = NavController(LocalContext.curre
         Column {
             SearchForm(
                 modifier = Modifier.fillMaxWidth().padding(16.dp)
-            ) { println(it) }
+            ) {
+                searchQuery ->
+                viewModel.searchBooks(searchQuery)
+            }
 
             Spacer(modifier = Modifier.height(13.dp))
 
@@ -62,15 +66,8 @@ fun SearchScreen(navController: NavController = NavController(LocalContext.curre
 }
 
 @Composable
-fun BookList(navController: NavController) {
-    val listOfBooks = listOf(
-        MBook(id = "dadd", title = "Hello Again", authors = "All of us", notes = null),
-        MBook(id = "dadd", title = "Hello Again", authors = "All of us", notes = null),
-        MBook(id = "dadd", title = "Hello Again", authors = "All of us", notes = null),
-        MBook(id = "dadd", title = "Hello Again", authors = "All of us", notes = null),
-        MBook(id = "dadd", title = "Hello Again", authors = "All of us", notes = null),
-        MBook(id = "dadd", title = "Hello Again", authors = "All of us", notes = null),
-    )
+fun BookList(navController: NavController, viewModel: SearchViewModel = hiltViewModel()) {
+    val listOfBooks = viewModel.list
 
     LazyColumn(modifier = Modifier.fillMaxSize(), contentPadding = PaddingValues(16.dp)) {
         items(items = listOfBooks) { book ->
