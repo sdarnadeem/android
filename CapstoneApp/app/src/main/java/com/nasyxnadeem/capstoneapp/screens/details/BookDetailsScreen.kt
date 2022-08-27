@@ -12,15 +12,19 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.nasyxnadeem.capstoneapp.data.Resource
+import com.nasyxnadeem.capstoneapp.model.book.Item
 import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun BookDetailsScreen(navController: NavController, bookId: String) {
+fun BookDetailsScreen(navController: NavController, bookId: String, viewModel: DetailsViewModel = hiltViewModel()) {
 
     Scaffold(topBar = {
         ReaderAppBar(
@@ -38,6 +42,10 @@ fun BookDetailsScreen(navController: NavController, bookId: String) {
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                val bookInfo = produceState<Resource<Item>>(initialValue = Resource.Loading()) {
+                    value = viewModel.getBookInfo(bookId)
+                }.value
+
                 Text(bookId)
             }
         }
