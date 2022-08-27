@@ -6,7 +6,6 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement.Absolute.SpaceBetween
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -25,8 +24,8 @@ import androidx.core.text.HtmlCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.nasyxnadeem.capstoneapp.data.Resource
 import com.nasyxnadeem.capstoneapp.model.MBook
 import com.nasyxnadeem.capstoneapp.model.book.Item
@@ -131,8 +130,20 @@ fun ShowBookDetails(bookInfo: Resource<Item>, navController: NavController) {
 
     Row(modifier = Modifier.padding(top = 6.dp), horizontalArrangement = Arrangement.SpaceAround) {
         RoundedButton(label = "save") {
-            val book = MBook()
-            saveToFirebase(book)
+            val book = MBook(
+                title = bookData?.title,
+                authors = bookData?.authors.toString(),
+                description = bookData?.description,
+                categories = bookData?.categories.toString(),
+                notes = "",
+                photoUrl = bookData?.imageLinks?.thumbnail,
+                publishedDate = bookData?.publishedDate,
+                pageCount = bookData?.pageCount.toString(),
+                rating = 0.0,
+                googleBookId = googleBookid,
+                userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
+            )
+            SaveToFirebase(book, navController)
         }
         Spacer(modifier = Modifier.width(25.dp))
 
@@ -142,7 +153,25 @@ fun ShowBookDetails(bookInfo: Resource<Item>, navController: NavController) {
     }
 }
 
-fun saveToFirebase(book: MBook) {
+@Composable
+fun SaveToFirebase(book: MBook, navController: NavController) {
     val db = FirebaseFirestore.getInstance()
+    val dbCollection = db.collection("books")
+
+    if (book.toString().isNotEmpty()) {
+        dbCollection.add(book).addOnSuccessListener {
+            documentRef ->
+            val docId = documentRef.id
+            dbCollection.document(docId).update(
+                hashMapOf("id" to docId) as Map<String, Any>
+            ).addOnCompleteListener {
+                if (it.isSuccessful) {
+                    navController.popBackStack()
+                }
+            }.addOnFailureListener {
+                println("firebase error")
+            }
+        }
+    }
 
 }
