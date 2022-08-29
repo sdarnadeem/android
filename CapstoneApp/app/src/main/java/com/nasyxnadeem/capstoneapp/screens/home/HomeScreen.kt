@@ -110,7 +110,7 @@ fun HomeContent(navController: NavController, viewModel: HomeScreenViewModel) {
 @Composable
 fun BookListArea(books: List<MBook>, navController: NavController) {
     HorizontalScrollableComponent(books) {
-        // TODO: DO SOMETHING
+        navController.navigate(ReaderScreens.UpdateScreen.name + "/$it")
     }
 }
 

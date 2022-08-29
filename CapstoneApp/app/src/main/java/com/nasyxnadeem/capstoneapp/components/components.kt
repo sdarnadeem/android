@@ -323,7 +323,7 @@ fun ListCard(
         ) {
             Row(horizontalArrangement = Arrangement.Center) {
                 Image(
-                    painter = rememberAsyncImagePainter(model = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMvHFhNnMfyhZrz8vkkVA1XkaJojTp7OUw4QYA4enWgg&s"),
+                    painter = rememberAsyncImagePainter(model = book.photoUrl.toString()),
                     contentDescription = null,
                     modifier = Modifier.height(140.dp).width(100.dp).padding(4.dp)
                 )

@@ -1,5 +1,6 @@
 package com.nasyxnadeem.capstoneapp.navigation
 
+import UpdateScreen
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavType
@@ -51,6 +52,16 @@ fun ReaderNavigation() {
             }
 
 
+        }
+
+        val updateName = ReaderScreens.UpdateScreen.name
+        composable("$updateName/{bookItemId}", arguments = listOf(navArgument("bookItemId") {
+            type = NavType.StringType
+        })) {
+            navBackStackEntry ->
+            navBackStackEntry.arguments?.getString("bookItemId").let {
+                UpdateScreen(navController, bookItemId = it.toString())
+            }
         }
     }
 }
