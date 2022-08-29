@@ -26,10 +26,8 @@ class FireRepository @Inject constructor(
 
         } catch (e : FirebaseFirestoreException) {
             dataOrException.e = e
-            dataOrException.loading = false
         }
 
-        dataOrException.loading = false
         return dataOrException
 
     }
