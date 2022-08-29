@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseAuth
@@ -25,7 +26,7 @@ import com.nasyxnadeem.capstoneapp.model.MBook
 import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 
 @Composable
-fun Home(navController: NavController) {
+fun Home(navController: NavController, viewModel: HomeScreenViewModel = hiltViewModel()) {
     Scaffold(
         topBar = { ReaderAppBar(title = "Nasyx Nadeem", navController = navController) },
         floatingActionButton = {
@@ -36,13 +37,24 @@ fun Home(navController: NavController) {
     ) {
         val iti = it
         Surface(modifier = Modifier.fillMaxSize()) {
-            HomeContent(navController)
+            HomeContent(navController, viewModel)
         }
     }
 }
 
 @Composable
-fun HomeContent(navController: NavController) {
+fun HomeContent(navController: NavController, viewModel: HomeScreenViewModel) {
+
+    var listOfBooks = emptyList<MBook>()
+    val currentUser = FirebaseAuth.getInstance().currentUser
+
+    if (!viewModel.data.value.data.isNullOrEmpty()) {
+        listOfBooks = viewModel.data.value.data!!.toList().filter {
+            it.userId == currentUser?.uid
+        }
+
+
+    }
 
     val currentUserName = if (!FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()) {
         FirebaseAuth.getInstance().currentUser?.email?.split("@")?.get(0)

@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import com.nasyxnadeem.capstoneapp.screens.SplashScreen
 import com.nasyxnadeem.capstoneapp.screens.details.BookDetailsScreen
 import com.nasyxnadeem.capstoneapp.screens.home.Home
+import com.nasyxnadeem.capstoneapp.screens.home.HomeScreenViewModel
 import com.nasyxnadeem.capstoneapp.screens.login.LoginScreen
 import com.nasyxnadeem.capstoneapp.screens.search.SearchScreen
 import com.nasyxnadeem.capstoneapp.screens.search.SearchViewModel
@@ -29,7 +30,8 @@ fun ReaderNavigation() {
             LoginScreen(navController = navController)
         }
         composable(route = ReaderScreens.ReaderHomeScreen.name) {
-            Home(navController = navController)
+            val viewModel = hiltViewModel<HomeScreenViewModel>()
+            Home(navController = navController, viewModel = viewModel)
         }
 
         composable(route = ReaderScreens.ReaderStatsScreen.name) {

@@ -1,6 +1,8 @@
 package com.nasyxnadeem.capstoneapp.di
 
+import com.google.firebase.firestore.FirebaseFirestore
 import com.nasyxnadeem.capstoneapp.network.BooksApi
+import com.nasyxnadeem.capstoneapp.repository.FireRepository
 import com.nasyxnadeem.capstoneapp.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -13,6 +15,10 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+    
+    @Singleton
+    @Provides
+    fun provideFireBookRepository() = FireRepository(queryBook = FirebaseFirestore.getInstance().collection("books"))
 
     @Provides
     @Singleton
