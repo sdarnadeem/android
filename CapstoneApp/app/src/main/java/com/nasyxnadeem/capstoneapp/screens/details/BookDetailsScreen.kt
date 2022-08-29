@@ -143,12 +143,12 @@ fun ShowBookDetails(bookInfo: Resource<Item>, navController: NavController) {
                 googleBookId = googleBookid,
                 userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
             )
-            SaveToFirebase(book, navController)
+//            SaveToFirebase(book, navController)
         }
         Spacer(modifier = Modifier.width(25.dp))
 
         RoundedButton(label = "Cancel") {
-            navController.popBackStack()
+//            navController.popBackStack()
         }
     }
 }
