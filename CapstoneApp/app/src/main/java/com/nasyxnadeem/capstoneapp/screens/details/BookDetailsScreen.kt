@@ -143,18 +143,18 @@ fun ShowBookDetails(bookInfo: Resource<Item>, navController: NavController) {
                 googleBookId = googleBookid,
                 userId = FirebaseAuth.getInstance().currentUser?.uid.toString()
             )
-//            SaveToFirebase(book, navController)
+            saveToFirebase(book, navController)
         }
         Spacer(modifier = Modifier.width(25.dp))
 
         RoundedButton(label = "Cancel") {
-//            navController.popBackStack()
+            navController.popBackStack()
         }
     }
 }
 
-@Composable
-fun SaveToFirebase(book: MBook, navController: NavController) {
+
+fun saveToFirebase(book: MBook, navController: NavController) {
     val db = FirebaseFirestore.getInstance()
     val dbCollection = db.collection("books")
 

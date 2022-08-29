@@ -84,7 +84,7 @@ fun InputField(
             .padding(bottom = 10.dp, start = 10.dp, end = 10.dp)
             .fillMaxWidth(),
         value = valueState.value,
-        onValueChange = {valueState.value = it},
+        onValueChange = { valueState.value = it },
         label = {
             Text(text = labelId)
         },
@@ -113,7 +113,8 @@ fun PasswordInput(
     onAction: KeyboardActions = KeyboardActions.Default,
     imeAction: ImeAction = ImeAction.Done
 ) {
-    val visualTransformation = if (passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
+    val visualTransformation =
+        if (passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation()
 
     OutlinedTextField(
         value = passwordState.value,
@@ -157,7 +158,7 @@ fun PasswordVisibility(passwordVisibility: MutableState<Boolean>) {
 fun SubmitButton(
     textId: String = "Login",
     loading: Boolean = false,
-    validInputs :Boolean = true,
+    validInputs: Boolean = true,
     onClick: () -> Unit
 ) {
     Button(
@@ -190,14 +191,15 @@ fun FABContent(
 }
 
 @Composable
-fun TitleSection(modifier: Modifier = Modifier, label : String) {
+fun TitleSection(modifier: Modifier = Modifier, label: String) {
     Surface(
         modifier = modifier.padding(start = 5.dp, top = 1.dp)
     ) {
         Column(
 
         ) {
-            Text(text = label,
+            Text(
+                text = label,
                 fontSize = 19.sp,
                 fontStyle = FontStyle.Normal,
                 textAlign = TextAlign.Left
@@ -230,7 +232,11 @@ fun ReaderAppBar(
                     )
                 }
                 if (icon != null) {
-                    Icon(imageVector = icon, contentDescription = "arrowBack", tint = Color.Red.copy(alpha = 0.7f), modifier = Modifier.clickable { onBackArrowClicked.invoke() })
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "arrowBack",
+                        tint = Color.Red.copy(alpha = 0.7f),
+                        modifier = Modifier.clickable { onBackArrowClicked.invoke() })
                 }
                 Spacer(modifier = Modifier.width(40.dp))
 
@@ -269,13 +275,22 @@ fun RoundedButton(
     radius: Int = 29,
     onPress: () -> Unit = {}
 ) {
-    Surface(modifier = Modifier.clip(RoundedCornerShape(
-        topStartPercent = radius,
-        bottomEndPercent = radius
-    )), color = Color.Blue) {
-        Column(modifier = Modifier.width(90.dp).heightIn(40.dp).clickable {
-            onPress.invoke()
-        }, verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+    Surface(
+        modifier = Modifier.clip(
+            RoundedCornerShape(
+                topStartPercent = radius,
+                bottomEndPercent = radius
+            )
+        ), color = Color.Blue
+    ) {
+
+        Column(
+            modifier = Modifier.width(90.dp).heightIn(40.dp).clickable {
+                onPress.invoke()
+            },
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Text(text = label, style = TextStyle(color = Color.White, fontSize = 15.sp))
         }
     }
@@ -284,7 +299,10 @@ fun RoundedButton(
 @Preview
 @Composable
 
-fun ListCard(book : MBook = MBook("asdf", "Running", "Me", "Hello world I'm Nadeem"), onPressDetails: (String) -> Unit = {}){
+fun ListCard(
+    book: MBook = MBook("asdf", "Running", "Me", "Hello world I'm Nadeem"),
+    onPressDetails: (String) -> Unit = {}
+) {
 
     val context = LocalContext.current
     val resources = context.resources
@@ -292,31 +310,53 @@ fun ListCard(book : MBook = MBook("asdf", "Running", "Me", "Hello world I'm Nade
 
     val screenWidth = displayMetrics.widthPixels / displayMetrics.density
     val spacing = 10.dp
-    Card(shape = RoundedCornerShape(29.dp)
-        , backgroundColor = Color.White,
+    Card(shape = RoundedCornerShape(29.dp), backgroundColor = Color.White,
         elevation = 6.dp,
         modifier = Modifier.padding(16.dp)
             .height(242.dp)
             .width(202.dp)
             .clickable { onPressDetails.invoke(book.title.toString()) }
     ) {
-        Column(modifier = Modifier.width(screenWidth.dp - (spacing * 2)), horizontalAlignment = Alignment.Start) {
+        Column(
+            modifier = Modifier.width(screenWidth.dp - (spacing * 2)),
+            horizontalAlignment = Alignment.Start
+        ) {
             Row(horizontalArrangement = Arrangement.Center) {
-                Image(painter = rememberAsyncImagePainter(model = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMvHFhNnMfyhZrz8vkkVA1XkaJojTp7OUw4QYA4enWgg&s"), contentDescription = null, modifier = Modifier.height(140.dp).width(100.dp).padding(4.dp))
+                Image(
+                    painter = rememberAsyncImagePainter(model = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMvHFhNnMfyhZrz8vkkVA1XkaJojTp7OUw4QYA4enWgg&s"),
+                    contentDescription = null,
+                    modifier = Modifier.height(140.dp).width(100.dp).padding(4.dp)
+                )
 
                 Spacer(modifier = Modifier.width(50.dp))
 
-                Column(modifier = Modifier.padding(top = 25.dp),
+                Column(
+                    modifier = Modifier.padding(top = 25.dp),
                     verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(imageVector = Icons.Rounded.FavoriteBorder, contentDescription = "Fav Icon", modifier = Modifier.padding(bottom = 1.dp))
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Icon(
+                        imageVector = Icons.Rounded.FavoriteBorder,
+                        contentDescription = "Fav Icon",
+                        modifier = Modifier.padding(bottom = 1.dp)
+                    )
 
                     BookRating(score = 3.5)
                 }
             }
-            Text(text = "Book Title", modifier = Modifier.padding(4.dp), fontWeight = FontWeight.Bold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(
+                text = "Book Title",
+                modifier = Modifier.padding(4.dp),
+                fontWeight = FontWeight.Bold,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
 
-            Text(text = "Authors: All", modifier = Modifier.padding(4.dp), style = MaterialTheme.typography.caption)
+            Text(
+                text = "Authors: All",
+                modifier = Modifier.padding(4.dp),
+                style = MaterialTheme.typography.caption
+            )
         }
         Row(horizontalArrangement = Arrangement.End, verticalAlignment = Alignment.Bottom) {
             RoundedButton(
@@ -330,15 +370,20 @@ fun ListCard(book : MBook = MBook("asdf", "Running", "Me", "Hello world I'm Nade
 
 @Composable
 fun BookRating(score: Double = 4.5) {
-    Surface(modifier = Modifier
-        .height(70.dp)
-        .padding(4.dp),
+    Surface(
+        modifier = Modifier
+            .height(70.dp)
+            .padding(4.dp),
         elevation = 6.dp,
         color = Color.White
     ) {
 
         Column(modifier = Modifier.padding(4.dp)) {
-            Icon(imageVector = Icons.Filled.StarBorder, contentDescription = "Start", modifier = Modifier.padding(3.dp))
+            Icon(
+                imageVector = Icons.Filled.StarBorder,
+                contentDescription = "Start",
+                modifier = Modifier.padding(3.dp)
+            )
             Text(text = score.toString(), style = MaterialTheme.typography.subtitle1)
         }
     }
