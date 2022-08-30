@@ -12,10 +12,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.produceState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -200,9 +197,54 @@ fun ShowSimpleForm(book: MBook, navController: NavHostController) {
 
 
         Spacer(modifier = Modifier.width(100.dp))
-        RoundedButton("Delete")
+        val openDialog = remember {
+            mutableStateOf(false)
+        }
+
+        if (openDialog.value) {
+            ShowAlertDialog(title = "are you sure to delete the book this action is not reversible", openDialog = openDialog, message = "Do you really wanna delete this note" ) {
+                FirebaseFirestore.getInstance().collection("books")
+                    .document(book.id!!)
+                    .delete()
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            openDialog.value = false
+                            navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+                        }
+                    }
+            }
+        }
+        RoundedButton("Delete") {
+            openDialog.value = true
+        }
     }
 }
+
+@Composable
+fun ShowAlertDialog(title: String,
+                    message: String,
+                    openDialog: MutableState<Boolean>,
+                    onYesPressed: () -> Unit ) {
+    if (openDialog.value) {
+        AlertDialog(onDismissRequest = {}, title = {
+            Text("Delete Book")
+
+        }, text = {
+            Text(message)
+        }, buttons = {
+            Row(modifier = Modifier.padding(all = 8.dp), horizontalArrangement = Arrangement.Center) {
+                TextButton(onClick = {onYesPressed.invoke()})
+                {
+                    Text("Yes")
+                }
+                TextButton(onClick = {openDialog.value = false})
+                {
+                    Text("No")
+                }
+            }
+        })
+
+    }}
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
