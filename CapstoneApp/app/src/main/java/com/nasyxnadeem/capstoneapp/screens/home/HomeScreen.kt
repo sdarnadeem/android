@@ -103,7 +103,7 @@ fun HomeContent(navController: NavController, viewModel: HomeScreenViewModel) {
 
         TitleSection(label = "Reading  List")
 
-        BookListArea(books = emptyList<MBook>(), navController = navController)
+        BookListArea(books = listOfBooks, navController = navController)
     }
 }
 
@@ -122,7 +122,7 @@ fun HorizontalScrollableComponent(books: List<MBook>, onCardPressed: (String) ->
 
         for (book in books) {
             ListCard(book) {
-                onCardPressed(it)
+                onCardPressed(book.googleBookId.toString())
             }
         }
     }
