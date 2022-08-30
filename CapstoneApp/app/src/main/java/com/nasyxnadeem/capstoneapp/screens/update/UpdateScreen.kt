@@ -1,5 +1,7 @@
 import android.annotation.SuppressLint
+import android.os.Build
 import android.widget.Space
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
@@ -28,10 +31,15 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.compose.rememberAsyncImagePainter
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
 import com.nasyxnadeem.capstoneapp.data.DataOrException
 import com.nasyxnadeem.capstoneapp.model.MBook
+import com.nasyxnadeem.capstoneapp.navigation.ReaderScreens
 import com.nasyxnadeem.capstoneapp.screens.home.HomeScreenViewModel
+import com.nasyxnadeem.capstoneapp.utils.formatDate
 
+@RequiresApi(Build.VERSION_CODES.N)
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun UpdateScreen(
@@ -83,8 +91,10 @@ fun UpdateScreen(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.N)
 @Composable
 fun ShowSimpleForm(book: MBook, navController: NavHostController) {
+    val context = LocalContext.current
     val notesText = remember {
         mutableStateOf("")
     }
@@ -95,6 +105,10 @@ fun ShowSimpleForm(book: MBook, navController: NavHostController) {
 
     val isFinishedReading = remember {
         mutableStateOf(false)
+    }
+
+    val ratingVal = remember {
+        mutableStateOf(0)
     }
     SimpleForm(
         defaultValue = if (book.notes.toString().isNotEmpty())
@@ -122,7 +136,7 @@ fun ShowSimpleForm(book: MBook, navController: NavHostController) {
                     )
                 }
             } else {
-                Text("Started on: ${book.startReading}")
+                Text("Started on: ${formatDate(book.startReading!!)}")
             }
 
         }
@@ -138,10 +152,55 @@ fun ShowSimpleForm(book: MBook, navController: NavHostController) {
                     Text(text = "Finished Reading")
                 }
             } else {
-                Text("Finished on ${book.finishedReading}")
+                Text("Finished on ${formatDate(book.finishedReading!!)}")
             }
         }
 
+    }
+    Text("Rating", modifier = Modifier.padding(bottom = 3.dp))
+    book.rating?.toInt().let {
+        RatingBar(rating = it!!) {
+            ratingVal.value = it
+        }
+    }
+
+    Spacer(modifier = Modifier.padding(bottom = 15.dp))
+
+    Row(horizontalArrangement = Arrangement.SpaceAround) {
+        val changedNotes = book.notes != notesText.value
+        val changedRating = book.rating?.toInt() != ratingVal.value
+        val isFinishedTimeStamp = if (isFinishedReading.value) Timestamp.now() else book.finishedReading
+
+        val isStartedTimeStamp = if (isStartedReading.value) Timestamp.now() else book.startReading
+
+        val bookUpdate = changedNotes || changedRating || isStartedReading.value || isFinishedReading.value
+
+        val bookToUpdate = hashMapOf(
+            "finished_reading_at" to isFinishedTimeStamp,
+            "started_reading_at" to isStartedTimeStamp,
+            "rating" to ratingVal.value,
+            "notes" to notesText.value
+        ).toMap()
+
+        RoundedButton(label = "Update") {
+            if (bookUpdate) {
+                FirebaseFirestore.getInstance()
+                    .collection("books")
+                    .document(book.id!!)
+                    .update(bookToUpdate)
+                    .addOnCompleteListener {
+                        showToast(context, "Book updated Successfully")
+                        navController.navigate(ReaderScreens.ReaderHomeScreen.name)
+                    }.addOnFailureListener {
+                        println(it.message)
+                    }
+            }
+        }
+
+
+
+        Spacer(modifier = Modifier.width(100.dp))
+        RoundedButton("Delete")
     }
 }
 
